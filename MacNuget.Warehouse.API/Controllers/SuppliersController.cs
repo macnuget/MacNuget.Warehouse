@@ -1,3 +1,4 @@
+using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MacNuget.Warehouse.API.Controllers
@@ -15,10 +16,12 @@ namespace MacNuget.Warehouse.API.Controllers
     {
 
         private readonly ILogger<SuppliersController> _logger;
+        private readonly ISuppliersService _service;
 
-        public SuppliersController(ILogger<SuppliersController> logger)
+        public SuppliersController(ILogger<SuppliersController> logger, ISuppliersService service)
         {
             _logger = logger;
+            _service = service;
         }
 
         [HttpGet]
