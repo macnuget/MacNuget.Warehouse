@@ -10,7 +10,7 @@
     {
         IEnumerable<TEntity> GetAll();
         TEntity Get(TPrimaryKey id);
-        void Insert(TEntity entity);
+        TPrimaryKey Insert(TEntity entity);
         void Update(TEntity entity);
         void Delete(TPrimaryKey id);
         long Count();

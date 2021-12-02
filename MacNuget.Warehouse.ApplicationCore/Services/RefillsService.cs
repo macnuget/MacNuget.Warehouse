@@ -30,9 +30,10 @@ namespace MacNuget.Warehouse.ApplicationCore.Services
             return refill;
         }
 
-        public void InsertRefill(Refill entity)
+        public int InsertRefill(Refill entity)
         {
-            _refillsRepository.Insert(entity);
+            var id = _refillsRepository.Insert(entity);
+            return id;
         }
 
         public void UpdateRefill(Refill entity)

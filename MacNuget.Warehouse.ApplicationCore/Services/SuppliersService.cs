@@ -30,9 +30,10 @@
             return supplier;
         }
 
-        public void InsertSupplier(Supplier entity)
+        public string InsertSupplier(Supplier entity)
         {
-            _suppliersRepository.Insert(entity);
+            var id = _suppliersRepository.Insert(entity);
+            return id;
         }
 
         public void UpdateSupplier(Supplier entity)

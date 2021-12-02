@@ -11,7 +11,7 @@
     {
         IEnumerable<Refill> GetAllRefills();
         Refill GetRefill(int id);
-        void InsertRefill(Refill entity);
+        int InsertRefill(Refill entity);
         void UpdateRefill(Refill entity);
         void DeleteRefill(int id);
     }

@@ -11,7 +11,7 @@
     {
         IEnumerable<Product> GetAllProducts();
         Product GetProduct(int id);
-        void InsertProduct(Product entity);
+        int InsertProduct(Product entity);
         void UpdateProduct(Product entity);
         void DeleteProduct(int id);
     }

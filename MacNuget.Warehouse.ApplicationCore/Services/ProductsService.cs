@@ -30,9 +30,10 @@
             return product;
         }
 
-        public void InsertProduct(Product entity)
+        public int InsertProduct(Product entity)
         {
-            _productsRepository.Insert(entity);
+            var id = _productsRepository.Insert(entity);
+            return id;
         }
 
         public void UpdateProduct(Product entity)
