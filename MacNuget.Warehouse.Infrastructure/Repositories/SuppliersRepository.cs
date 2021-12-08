@@ -34,11 +34,11 @@
             return DB.Query<Supplier>(s => s.VatNumber == id).FirstOrDefault();
         }
 
-        public void Insert(Supplier entity)
+        public string Insert(Supplier entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Insert<Supplier>(entity);
+            return DB.Insert<Supplier, string>(entity);
         }
 
         public void Update(Supplier entity)

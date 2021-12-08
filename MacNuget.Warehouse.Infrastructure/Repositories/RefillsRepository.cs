@@ -34,11 +34,11 @@
             return DB.Query<Refill>(r => r.Id == id).FirstOrDefault();
         }
 
-        public void Insert(Refill entity)
+        public int Insert(Refill entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Insert<Refill>(entity);
+            return DB.Insert<Refill, int>(entity);
         }
 
         public void Update(Refill entity)

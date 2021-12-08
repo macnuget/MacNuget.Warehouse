@@ -11,7 +11,7 @@
     {
         IEnumerable<Supplier> GetAllSuppliers();
         Supplier GetSupplier(string id);
-        void InsertSupplier(Supplier entity);
+        string InsertSupplier(Supplier entity);
         void UpdateSupplier(Supplier entity);
         void DeleteSupplier(string id);
     }

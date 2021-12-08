@@ -34,11 +34,11 @@
             return DB.Query<Product>(p => p.Id == id).FirstOrDefault();
         }
 
-        public void Insert(Product entity)
+        public int Insert(Product entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Insert<Product>(entity);
+            return DB.Insert<Product, int>(entity);
         }
 
         public void Update(Product entity)
