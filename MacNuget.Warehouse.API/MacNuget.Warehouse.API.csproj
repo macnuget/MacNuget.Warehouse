@@ -4,10 +4,18 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a16ede93-2756-41ae-a721-38563e75d181</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RepoDb.PostgreSql" Version="1.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MacNuget.Warehouse.ApplicationCore\MacNuget.Warehouse.ApplicationCore.csproj" />
+    <ProjectReference Include="..\MacNuget.Warehouse.Domain\MacNuget.Warehouse.Domain.csproj" />
+    <ProjectReference Include="..\MacNuget.Warehouse.Infrastructure\MacNuget.Warehouse.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

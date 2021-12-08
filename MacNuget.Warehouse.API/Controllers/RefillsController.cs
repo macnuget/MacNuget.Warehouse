@@ -1,15 +1,10 @@
+using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
+using MacNuget.Warehouse.Domain.Dto;
+using MacNuget.Warehouse.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MacNuget.Warehouse.API.Controllers
 {
-    public class Refill
-    {
-        int Id;
-        int ProductId;
-        string RefillTaxNumber;
-        DateTime Date;
-        int Quantity;
-    }
 
     [ApiController]
     [Route("[controller]")]
@@ -17,38 +12,53 @@ namespace MacNuget.Warehouse.API.Controllers
     {
 
         private readonly ILogger<RefillsController> _logger;
+        private readonly IRefillsService _service;
 
-        public RefillsController(ILogger<RefillsController> logger)
+        public RefillsController(ILogger<RefillsController> logger, IRefillsService service)
         {
             _logger = logger;
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Refill>>> GetAll()
+        public async Task<ActionResult<IEnumerable<RefillDto>>> GetAll()
         {
             return StatusCode(501);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Refill>> GetById(string id)
+        public async Task<ActionResult<RefillDto>> GetById(int id)
         {
-            return StatusCode(501);
+            var refill = _service.GetRefill(id);
+            return new RefillDto()
+            {
+                Id = refill.Id,
+                ArriveDate = refill.ArriveDate,
+                ProductId = refill.ProductId,
+                SupplierId = refill.SupplierId,
+            };
         }
 
         [HttpPost("")]
-        public async Task<ActionResult<Refill>> Create()
+        public async Task<ActionResult<RefillDto>> Create([FromBody] RefillDto refill)
         {
-            return StatusCode(501);
+
+            _service.InsertRefill(new Refill
+            {
+                Quantity = refill.Quantity
+            });
+
+            return StatusCode(500);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Refill>> Update()
+        public async Task<ActionResult<RefillDto>> Update([FromBody] RefillDto refill, int id)
         {
             return StatusCode(501);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Refill>> Delete()
+        public async Task<ActionResult<RefillDto>> Delete(int id)
         {
             return StatusCode(501);
         }
