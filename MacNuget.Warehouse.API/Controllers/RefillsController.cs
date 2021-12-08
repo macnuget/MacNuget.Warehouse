@@ -23,14 +23,22 @@ namespace MacNuget.Warehouse.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RefillDto>>> GetAll()
         {
-            return StatusCode(501);
+            var items = _service.GetAllRefills().Select(x => new RefillDto
+            {
+                ArriveDate = x.ArriveDate,
+                Id = x.Id,
+                ProductId = x.ProductId,
+                Quantity = x.Quantity
+            });
+
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<RefillDto>> GetById(int id)
         {
             var refill = _service.GetRefill(id);
-            return new RefillDto()
+            return new RefillDto
             {
                 Id = refill.Id,
                 ArriveDate = refill.ArriveDate,
@@ -43,24 +51,33 @@ namespace MacNuget.Warehouse.API.Controllers
         public async Task<ActionResult<RefillDto>> Create([FromBody] RefillDto refill)
         {
 
-            _service.InsertRefill(new Refill
+            var id = _service.InsertRefill(new Refill
             {
                 Quantity = refill.Quantity
             });
 
-            return StatusCode(500);
+            return await GetById(id);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<RefillDto>> Update([FromBody] RefillDto refill, int id)
         {
-            return StatusCode(501);
+            _service.UpdateRefill(new Refill
+            {
+                Id = id,
+                ArriveDate = refill.ArriveDate,
+                Quantity = refill.Quantity
+            });
+
+            return await GetById(id);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<RefillDto>> Delete(int id)
         {
-            return StatusCode(501);
+            var item = await GetById(id);
+            _service.DeleteRefill(id);
+            return item;
         }
     }
 }

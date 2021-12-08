@@ -23,14 +23,20 @@ namespace MacNuget.Warehouse.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
         {
-            return StatusCode(501);
+            var items = _service.GetAllProducts().Select(x => new ProductDto
+            {
+                Id = x.Id,
+                Quantity = x.Quantity
+            });
+
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetById(int id)
         {
             var product = _service.GetProduct(id);
-            return new ProductDto()
+            return new ProductDto
             {
                 Id = product.Id,
                 Quantity = product.Quantity,
@@ -40,7 +46,12 @@ namespace MacNuget.Warehouse.API.Controllers
         [HttpPost("")]
         public async Task<ActionResult<ProductDto>> Create([FromBody] ProductDto product)
         {
-            return StatusCode(501);
+            var id = _service.InsertProduct(new Product
+            {
+                Quantity = product.Quantity
+            });
+
+            return await GetById(id);
         }
 
         [HttpPut("{id}")]
@@ -58,7 +69,9 @@ namespace MacNuget.Warehouse.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductDto>> Delete(int id)
         {
-            return StatusCode(501);
+            var item = await GetById(id);
+            _service.DeleteProduct(id);
+            return item;
         }
     }
 }
