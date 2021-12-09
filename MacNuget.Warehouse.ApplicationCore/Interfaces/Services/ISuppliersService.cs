@@ -11,7 +11,7 @@
     {
         Task<IEnumerable<Supplier>> GetAllSuppliers();
         Task<Supplier> GetSupplier(string id);
-        Task<string> InsertSupplier(Supplier entity);
+        Task<Supplier> InsertSupplier(Supplier entity);
         Task<Supplier> UpdateSupplier(Supplier entity);
         Task<Supplier> DeleteSupplier(string id);
     }

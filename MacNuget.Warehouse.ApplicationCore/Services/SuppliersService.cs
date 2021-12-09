@@ -18,32 +18,34 @@
             _suppliersRepository = suppliersRepository;
         }
 
-        public IEnumerable<Supplier> GetAllSuppliers()
+        public async Task<IEnumerable<Supplier>> GetAllSuppliers()
         {
-            var list = _suppliersRepository.GetAll();
+            var list = await _suppliersRepository.GetAll();
             return list;
         }
 
-        public Supplier GetSupplier(string id)
+        public async Task<Supplier> GetSupplier(string id)
         {
-            var supplier = _suppliersRepository.Get(id);
+            var supplier = await _suppliersRepository.Get(id);
             return supplier;
         }
 
-        public string InsertSupplier(Supplier entity)
+        public async Task<Supplier> InsertSupplier(Supplier entity)
         {
-            var id = _suppliersRepository.Insert(entity);
-            return id;
+            var id = await _suppliersRepository.Insert(entity);
+            return await _suppliersRepository.Get(id);
         }
 
-        public void UpdateSupplier(Supplier entity)
+        public async Task<Supplier> UpdateSupplier(Supplier entity)
         {
-            _suppliersRepository.Update(entity);
+            await _suppliersRepository.Update(entity);
+            return await _suppliersRepository.Get(entity.VatNumber);
         }
 
-        public void DeleteSupplier(string id)
+        public async Task<Supplier> DeleteSupplier(string id)
         {
-            _suppliersRepository.Delete(id);
+            await _suppliersRepository.Delete(id);
+            return await _suppliersRepository.Get(id);
         }
     }
 }

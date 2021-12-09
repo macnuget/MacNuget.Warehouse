@@ -8,11 +8,10 @@
 
     public interface IRepositoryBase<TEntity, TPrimaryKey>
     {
-        IEnumerable<TEntity> GetAll();
-        TEntity Get(TPrimaryKey id);
-        TPrimaryKey Insert(TEntity entity);
-        void Update(TEntity entity);
-        void Delete(TPrimaryKey id);
-        long Count();
+        Task<IEnumerable<TEntity>> GetAll();
+        Task<TEntity> Get(TPrimaryKey id);
+        Task<TPrimaryKey> Insert(TEntity entity);
+        Task Update(TEntity entity);
+        Task Delete(TPrimaryKey id);
     }
 }

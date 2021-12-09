@@ -20,44 +20,40 @@
             _configuration = configuration;
         }
 
-        public IEnumerable<Product> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.QueryAll<Product>();
+            return await DB.QueryAllAsync<Product>();
         }
 
-        public Product Get(int id)
+        public async Task<Product> Get(int id)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.Query<Product>(p => p.Id == id).FirstOrDefault();
+            return (await DB.QueryAsync<Product>(p => p.Id == id)).FirstOrDefault();
         }
 
-        public int Insert(Product entity)
+        public async Task<int> Insert(Product entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.Insert<Product, int>(entity);
+            return await DB.InsertAsync<Product, int>(entity);
         }
 
-        public void Update(Product entity)
+        public async Task Update(Product entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Update<Product>(entity);
+            await DB.UpdateAsync<Product>(entity);
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Delete<Product>(p => p.Id == id);
+            await DB.DeleteAsync<Product>(p => p.Id == id);
         }
 
-        public long Count()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

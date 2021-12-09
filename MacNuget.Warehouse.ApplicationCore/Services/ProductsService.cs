@@ -18,32 +18,37 @@
             _productsRepository = productsRepository;
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            var list = _productsRepository.GetAll();
+            var list = await _productsRepository.GetAll();
             return list;
         }
 
-        public Product GetProduct(int id)
+        public async Task<Product> GetProduct(int id)
         {
-            var product = _productsRepository.Get(id);
+            var product = await _productsRepository.Get(id);
             return product;
         }
 
-        public int InsertProduct(Product entity)
+        
+        public async Task<Product> UpdateProduct(Product entity)
         {
-            var id = _productsRepository.Insert(entity);
-            return id;
+            await _productsRepository.Update(entity);
+            var product = await _productsRepository.Get(entity.Id);
+            return product;
         }
 
-        public void UpdateProduct(Product entity)
+        public async Task<Product> InsertProduct(Product entity)
         {
-            _productsRepository.Update(entity);
+            var id = await _productsRepository.Insert(entity);
+            return await _productsRepository.Get(id);
         }
 
-        public void DeleteProduct(int id)
+        public async Task<Product> DeleteProduct(int id)
         {
-            _productsRepository.Delete(id);
+            await _productsRepository.Delete(id);
+            return await _productsRepository.Get(id);
         }
+
     }
 }

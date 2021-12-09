@@ -11,7 +11,7 @@
     {
         Task<IEnumerable<Refill>> GetAllRefills();
         Task<Refill> GetRefill(int id);
-        Task<int> InsertRefill(Refill entity);
+        Task<Refill> InsertRefill(Refill entity);
         Task<Refill> UpdateRefill(Refill entity);
         Task<Refill> DeleteRefill(int id);
     }

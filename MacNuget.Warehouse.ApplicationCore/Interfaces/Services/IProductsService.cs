@@ -11,7 +11,7 @@
     {
         Task<IEnumerable<Product>> GetAllProducts();
         Task<Product> GetProduct(int id);
-        Task<int> InsertProduct(Product entity);
+        Task<Product> InsertProduct(Product entity);
         Task<Product> UpdateProduct(Product entity);
         Task<Product> DeleteProduct(int id);
     }

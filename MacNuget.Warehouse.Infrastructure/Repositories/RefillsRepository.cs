@@ -20,44 +20,41 @@
             _configuration = configuration;
         }
 
-        public IEnumerable<Refill> GetAll()
+        public async Task<IEnumerable<Refill>> GetAll()
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.QueryAll<Refill>();
+            return await DB.QueryAllAsync<Refill>();
         }
 
-        public Refill Get(int id)
+        public async Task<Refill> Get(int id)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.Query<Refill>(r => r.Id == id).FirstOrDefault();
+            return (await DB.QueryAsync<Refill>(r => r.Id == id)).FirstOrDefault();
         }
 
-        public int Insert(Refill entity)
+        public async Task<int> Insert(Refill entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.Insert<Refill, int>(entity);
+            return await DB.InsertAsync<Refill, int>(entity);
         }
 
-        public void Update(Refill entity)
+        public async Task Update(Refill entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Update<Refill>(entity);
+            await DB.UpdateAsync<Refill>(entity);
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Delete<Refill>(r => r.Id == id);
+            await DB.DeleteAsync<Refill>(r => r.Id == id);
         }
 
-        public long Count()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
