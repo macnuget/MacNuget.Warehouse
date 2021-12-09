@@ -32,12 +32,7 @@ namespace MacNuget.Warehouse.API.Controllers
 
         private Product ConvertToModel(ProductDto product)
         {
-            return new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Quantity = product.Quantity
-            };
+            return ConvertToModel(product, product.Id);
         }
 
         private Product ConvertToModel(ProductDto product, int id)

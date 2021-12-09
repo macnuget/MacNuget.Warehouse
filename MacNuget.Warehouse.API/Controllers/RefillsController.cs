@@ -33,14 +33,7 @@ namespace MacNuget.Warehouse.API.Controllers
 
         private Refill ConvertToModel(RefillDto refill)
         {
-            return new Refill
-            {
-                Id = refill.Id,
-                ArriveDate = refill.ArriveDate,
-                ProductId = refill.ProductId,
-                SupplierId = refill.SupplierId,
-                Quantity = refill.Quantity
-            };
+            return ConvertToModel(refill, refill.Id);
         }
 
         private Refill ConvertToModel(RefillDto refill, int id)

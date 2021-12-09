@@ -33,13 +33,7 @@ namespace MacNuget.Warehouse.API.Controllers
 
         private Supplier ConvertToModel(SupplierDto supplier)
         {
-            return new Supplier
-            {
-                Denomination = supplier.Denomination,
-                Email = supplier.Email,
-                PhoneNumber = supplier.PhoneNumber,
-                VatNumber = supplier.VatNumber
-            };
+            return ConvertToModel(supplier, supplier.VatNumber);
         }
 
         private Supplier ConvertToModel(SupplierDto supplier, string id)
