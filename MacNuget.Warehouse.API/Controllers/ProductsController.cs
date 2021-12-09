@@ -26,6 +26,7 @@ namespace MacNuget.Warehouse.API.Controllers
             var items = _service.GetAllProducts().Select(x => new ProductDto
             {
                 Id = x.Id,
+                Name = x.Name,
                 Quantity = x.Quantity
             });
 
@@ -39,6 +40,7 @@ namespace MacNuget.Warehouse.API.Controllers
             return new ProductDto
             {
                 Id = product.Id,
+                Name = product.Name,
                 Quantity = product.Quantity,
             };
         }
@@ -48,6 +50,7 @@ namespace MacNuget.Warehouse.API.Controllers
         {
             var id = _service.InsertProduct(new Product
             {
+                Name = product.Name,
                 Quantity = product.Quantity
             });
 
@@ -60,6 +63,7 @@ namespace MacNuget.Warehouse.API.Controllers
             _service.UpdateProduct(new Product
             {
                 Id=id,
+                Name = product.Name,
                 Quantity=product.Quantity
             });
 
