@@ -46,8 +46,9 @@
 
         public async Task<Product> DeleteProduct(int id)
         {
+            var item = await _productsRepository.Get(id);
             await _productsRepository.Delete(id);
-            return await _productsRepository.Get(id);
+            return item;
         }
 
     }

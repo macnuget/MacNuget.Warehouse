@@ -44,8 +44,9 @@ namespace MacNuget.Warehouse.ApplicationCore.Services
 
         public async Task<Refill> DeleteRefill(int id)
         {
+            var item = await (_refillsRepository.Get(id));
             await _refillsRepository.Delete(id);
-            return await (_refillsRepository.Get(id));
+            return item;
         }
     }
 }

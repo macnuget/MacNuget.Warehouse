@@ -44,8 +44,9 @@
 
         public async Task<Supplier> DeleteSupplier(string id)
         {
+            var item = await _suppliersRepository.Get(id);
             await _suppliersRepository.Delete(id);
-            return await _suppliersRepository.Get(id);
+            return item;
         }
     }
 }
