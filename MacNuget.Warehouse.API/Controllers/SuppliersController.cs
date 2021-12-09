@@ -20,25 +20,8 @@ namespace MacNuget.Warehouse.API.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<SupplierDto>>> GetAll()
+        private SupplierDto ConvertToDTO(Supplier supplier)
         {
-            var items = _service.GetAllSuppliers().Select(x => new SupplierDto
-            {
-                Denomination = x.Denomination,
-                Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                VatNumber = x.VatNumber
-            });
-
-            return Ok(items);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SupplierDto>> GetById(string id)
-        {
-            var supplier = _service.GetSupplier(id);
-
             return new SupplierDto
             {
                 Denomination = supplier.Denomination,
@@ -48,40 +31,86 @@ namespace MacNuget.Warehouse.API.Controllers
             };
         }
 
-        [HttpPost("")]
-        public async Task<ActionResult<SupplierDto>> Create([FromBody] SupplierDto supplier)
+        private Supplier ConvertToModel(SupplierDto supplier)
         {
-            var id = _service.InsertSupplier(new Supplier
+            return new Supplier
             {
                 Denomination = supplier.Denomination,
                 Email = supplier.Email,
                 PhoneNumber = supplier.PhoneNumber,
                 VatNumber = supplier.VatNumber
-            });
-
-            return await GetById(id);
+            };
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<SupplierDto>> Update([FromBody] SupplierDto supplier, string id)
+        private Supplier ConvertToModel(SupplierDto supplier, string id)
         {
-            _service.UpdateSupplier(new Supplier
+            return new Supplier
             {
                 Denomination = supplier.Denomination,
                 Email = supplier.Email,
                 PhoneNumber = supplier.PhoneNumber,
                 VatNumber = id
-            });
+            };
+        }
 
-            return await GetById(id);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SupplierDto>>> GetAll()
+        {
+            var items = (await _service.GetAllSuppliers()).Select(x => ConvertToDTO(x));
+
+            return new JsonResult(items)
+            {
+                StatusCode = 200
+            };
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SupplierDto>> GetById(string id)
+        {
+            var supplier = ConvertToDTO(await _service.GetSupplier(id));
+
+            return new JsonResult(supplier)
+            {
+                StatusCode = 200
+            };
+        }
+
+        [HttpPost("")]
+        public async Task<ActionResult<SupplierDto>> Create([FromBody] SupplierDto supplier)
+        {
+            var insertedSupplier = await _service.InsertSupplier(ConvertToModel(supplier));
+
+            var insertedSupplierDto = ConvertToDTO(insertedSupplier);
+
+            return new JsonResult(insertedSupplierDto)
+            {
+                StatusCode = 201
+            };
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<SupplierDto>> Update([FromBody] SupplierDto supplier, string id)
+        {
+            var updatedSupplier = await _service.UpdateSupplier(ConvertToModel(supplier, id));
+
+            var updatedSupplierDto = ConvertToDTO(updatedSupplier);
+
+            return new JsonResult(updatedSupplierDto)
+            {
+                StatusCode = 200
+            };
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<SupplierDto>> Delete(string id)
         {
-            var item = await GetById(id);
-            _service.DeleteSupplier(id);
-            return item;
+            var deletedSupplier = await _service.DeleteSupplier(id);
+            var deletedRefillDto = ConvertToDTO(deletedSupplier);
+
+            return new JsonResult(deletedRefillDto)
+            {
+                StatusCode = 200
+            };
         }
     }
 }

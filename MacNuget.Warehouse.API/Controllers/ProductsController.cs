@@ -2,6 +2,7 @@ using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
 using MacNuget.Warehouse.Domain.Dto;
 using MacNuget.Warehouse.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace MacNuget.Warehouse.API.Controllers
 {
@@ -20,62 +21,93 @@ namespace MacNuget.Warehouse.API.Controllers
             _service = service;
         }
 
+        private ProductDto ConvertToDTO(Product product) {
+            return new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Quantity = product.Quantity
+            };
+        }
+
+        private Product ConvertToModel(ProductDto product)
+        {
+            return new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Quantity = product.Quantity
+            };
+        }
+
+        private Product ConvertToModel(ProductDto product, int id)
+        {
+            return new Product
+            {
+                Id = id,
+                Name = product.Name,
+                Quantity = product.Quantity
+            };
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
         {
-            var items = _service.GetAllProducts().Select(x => new ProductDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Quantity = x.Quantity
-            });
+            var items = (await _service.GetAllProducts()).Select(x => ConvertToDTO(x));
 
-            return Ok(items);
+            return new JsonResult(items)
+            {
+                StatusCode = 200
+            };
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetById(int id)
         {
-            var product = _service.GetProduct(id);
-            return new ProductDto
+            var product = ConvertToDTO(await _service.GetProduct(id));
+
+            return new JsonResult(product)
             {
-                Id = product.Id,
-                Name = product.Name,
-                Quantity = product.Quantity,
+                StatusCode = 200
             };
         }
 
         [HttpPost("")]
         public async Task<ActionResult<ProductDto>> Create([FromBody] ProductDto product)
         {
-            var id = _service.InsertProduct(new Product
-            {
-                Name = product.Name,
-                Quantity = product.Quantity
-            });
+            var insertedProduct = await _service.InsertProduct(ConvertToModel(product));
 
-            return await GetById(id);
+            var insertedProductDto = ConvertToDTO(insertedProduct);
+
+            return new JsonResult(insertedProductDto)
+            {
+                StatusCode = 201
+            };
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductDto>> Update([FromBody] ProductDto product, int id)
         {
-            _service.UpdateProduct(new Product
-            {
-                Id=id,
-                Name = product.Name,
-                Quantity=product.Quantity
-            });
+            var updatedProduct = await _service.UpdateProduct(ConvertToModel(product, id));
+            var updatedProductDto = ConvertToDTO(updatedProduct);
 
-            return await GetById(id);
+
+            return new JsonResult(updatedProductDto)
+            {
+                StatusCode = 200
+            };
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductDto>> Delete(int id)
         {
-            var item = await GetById(id);
-            _service.DeleteProduct(id);
-            return item;
+            var deletedProduct = await _service.DeleteProduct(id);
+            var deletedProductDto = ConvertToDTO(deletedProduct);
+
+            return new JsonResult(deletedProductDto)
+            {
+                StatusCode = 200
+            };
         }
     }
 }
