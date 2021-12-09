@@ -1,4 +1,6 @@
-﻿namespace MacNuget.Warehouse.Domain.Models
+﻿using RepoDb.Attributes;
+
+namespace MacNuget.Warehouse.Domain.Models
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +8,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    [Map("Suppliers")]
     public class Supplier
     {
         public string VatNumber { get; set; }

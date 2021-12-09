@@ -9,10 +9,10 @@
 
     public interface ISuppliersService
     {
-        IEnumerable<Supplier> GetAllSuppliers();
-        Supplier GetSupplier(string id);
-        string InsertSupplier(Supplier entity);
-        void UpdateSupplier(Supplier entity);
-        void DeleteSupplier(string id);
+        Task<IEnumerable<Supplier>> GetAllSuppliers();
+        Task<Supplier> GetSupplier(string id);
+        Task<Supplier> InsertSupplier(Supplier entity);
+        Task<Supplier> UpdateSupplier(Supplier entity);
+        Task<Supplier> DeleteSupplier(string id);
     }
 }

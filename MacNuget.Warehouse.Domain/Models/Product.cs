@@ -1,4 +1,7 @@
-﻿namespace MacNuget.Warehouse.Domain.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RepoDb.Attributes;
+
+namespace MacNuget.Warehouse.Domain.Models
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +9,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    [Map("Products")]
     public class Product
     {
         public int Id { get; set; }
