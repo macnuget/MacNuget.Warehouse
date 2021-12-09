@@ -9,10 +9,10 @@
 
     public interface IProductsService 
     {
-        IEnumerable<Product> GetAllProducts();
-        Product GetProduct(int id);
-        int InsertProduct(Product entity);
-        void UpdateProduct(Product entity);
-        void DeleteProduct(int id);
+        Task<IEnumerable<Product>> GetAllProducts();
+        Task<Product> GetProduct(int id);
+        Task<int> InsertProduct(Product entity);
+        Task<Product> UpdateProduct(Product entity);
+        Task<Product> DeleteProduct(int id);
     }
 }
