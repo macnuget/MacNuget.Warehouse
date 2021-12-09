@@ -1,30 +1,30 @@
-﻿using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
-using MacNuget.Warehouse.Domain.Models;
-using MassTransit;
-using Microservices.Ecommerce.DTO.Events;
+﻿using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microservices.Ecommerce.DTO.Events;
+using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
+using MacNuget.Warehouse.Domain.Models;
 
 namespace MacNuget.Warehouse.ApplicationCore.Consumers
 {
-    public class UpdateProductConsumer : IConsumer<UpdateProductEvent>
+    public class NewProductConsumer : IConsumer<NewProductEvent>
     {
-        public UpdateProductConsumer()
+        public NewProductConsumer()
         {
         }
 
         private readonly IProductsService _productsService;
 
-        public UpdateProductConsumer(IProductsService productsService)
+        public NewProductConsumer(IProductsService productsService)
         {
             _productsService = productsService;
         }
-        public Task Consume(ConsumeContext<UpdateProductEvent> context)
+        public Task Consume(ConsumeContext<NewProductEvent> context)
         {
-
+            
             var product = context.Message;
 
             var productToInsert = new Product
@@ -34,10 +34,10 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
 
             };
 
-            _productsService.UpdateProduct(productToInsert);
+            _productsService.InsertProduct(productToInsert);
 
-            return Task.CompletedTask;
-
+            return Task.CompletedTask;  
+          
         }
     }
 }

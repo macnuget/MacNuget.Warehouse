@@ -28,9 +28,34 @@ namespace MacNuget.Warehouse.ApplicationCore.Services
                         }
                     );
 
-                    rabbitConfigurator.ReceiveEndpoint("new-quantity-event", e =>
+                    rabbitConfigurator.ReceiveEndpoint("update-product-event", e =>
                     {
                         e.Consumer<UpdateProductConsumer>();
+                    });
+
+                    rabbitConfigurator.ReceiveEndpoint("new-product-event", e =>
+                    {
+                        e.Consumer<NewProductConsumer>();
+                    });
+
+                    rabbitConfigurator.ReceiveEndpoint("delete-product-event", e =>
+                    {
+                        e.Consumer<DeleteProductConsumer>();
+                    });
+
+                    rabbitConfigurator.ReceiveEndpoint("update-order-event", e =>
+                    {
+                        e.Consumer<UpdateOrderConsumer>();
+                    });
+
+                    rabbitConfigurator.ReceiveEndpoint("new-order-event", e =>
+                    {
+                        e.Consumer<NewOrderConsumer>();
+                    });
+
+                    rabbitConfigurator.ReceiveEndpoint("delete-order-event", e =>
+                    {
+                        e.Consumer<DeleteOrderConsumer>();
                     });
 
                     rabbitConfigurator.ConfigureEndpoints(context);
