@@ -1,6 +1,8 @@
 using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
 using MacNuget.Warehouse.Domain.Dto;
 using MacNuget.Warehouse.Domain.Models;
+using MacNuget.Warehouse.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MacNuget.Warehouse.API.Controllers
@@ -13,11 +15,13 @@ namespace MacNuget.Warehouse.API.Controllers
 
         private readonly ILogger<RefillsController> _logger;
         private readonly IRefillsService _service;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public RefillsController(ILogger<RefillsController> logger, IRefillsService service)
+        public RefillsController(ILogger<RefillsController> logger, IRefillsService service, IPublishEndpoint publishEndpoint)
         {
             _logger = logger;
             _service = service;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -55,6 +59,12 @@ namespace MacNuget.Warehouse.API.Controllers
             {
                 Quantity = refill.Quantity
             });
+
+            var refillEvent = new NewRefillEvent();
+            refillEvent.Product.Id = (int)refill.ProductId;
+            refillEvent.Product.Quantity = refill.Quantity;
+
+            await _publishEndpoint.Publish(refillEvent);
 
             return await GetById(id);
         }

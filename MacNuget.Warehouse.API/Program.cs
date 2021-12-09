@@ -2,10 +2,13 @@ using MacNuget.Warehouse.ApplicationCore.Interfaces.Repositories;
 using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
 using MacNuget.Warehouse.ApplicationCore.Services;
 using MacNuget.Warehouse.Infrastructure.Repositories;
+using MassTransit;
 
 RepoDb.PostgreSqlBootstrap.Initialize();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMassTransitService();
 
 // Add services to the container.
 builder.Services.AddScoped<IProductsService,     ProductsService>    ();
@@ -16,6 +19,8 @@ builder.Services.AddScoped<ISuppliersRepository, SuppliersRepository>();
 builder.Services.AddScoped<IRefillsRepository,   RefillsRepository>  ();
 
 builder.Services.AddControllers();
+
+builder.Services.AddMassTransitHostedService();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
