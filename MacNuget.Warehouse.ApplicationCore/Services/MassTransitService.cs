@@ -16,46 +16,53 @@ namespace MacNuget.Warehouse.ApplicationCore.Services
         {
             services.AddMassTransit(o =>
             {
+                o.AddConsumer<NewProductConsumer>();
+                o.AddConsumer<NewOrderConsumer>();
+                o.AddConsumer<UpdateOrderConsumer>();
+                o.AddConsumer<UpdateProductConsumer>();
+                o.AddConsumer<DeleteProductConsumer>();
+                o.AddConsumer<DeleteOrderConsumer>();
+
                 o.UsingRabbitMq((context, rabbitConfigurator) =>
                 {
                     rabbitConfigurator.Host(
-                        "localhost",
-                        "/",
+                        "roedeer.rmq.cloudamqp.com",
+                        "vpeeygzh",
                         credentials =>
                         {
-                            credentials.Username("admin");
-                            credentials.Password("password");
+                            credentials.Username("vpeeygzh");
+                            credentials.Password("t0mDd3KRsJkXRV3DXzmCUfRWmDFbFu42");
                         }
                     );
 
-                    rabbitConfigurator.ReceiveEndpoint("update-product-event", e =>
+                    rabbitConfigurator.ReceiveEndpoint("gruppo1-update-product-event", e =>
                     {
-                        e.Consumer<UpdateProductConsumer>();
+                        e.Consumer<UpdateProductConsumer>(context);
                     });
 
-                    rabbitConfigurator.ReceiveEndpoint("new-product-event", e =>
+                    rabbitConfigurator.ReceiveEndpoint("gruppo1-new-product-event", e =>
                     {
-                        e.Consumer<NewProductConsumer>();
+                        e.Consumer<NewProductConsumer>(context);
                     });
 
-                    rabbitConfigurator.ReceiveEndpoint("delete-product-event", e =>
+                    rabbitConfigurator.ReceiveEndpoint("gruppo1-delete-product-event", e =>
                     {
-                        e.Consumer<DeleteProductConsumer>();
+                        e.Consumer<DeleteProductConsumer>(context);
                     });
 
-                    rabbitConfigurator.ReceiveEndpoint("update-order-event", e =>
+                    rabbitConfigurator.ReceiveEndpoint("gruppo1-update-order-event", e =>
                     {
-                        e.Consumer<UpdateOrderConsumer>();
+                        e.Consumer<UpdateOrderConsumer>(context);
                     });
 
-                    rabbitConfigurator.ReceiveEndpoint("new-order-event", e =>
+                    rabbitConfigurator.ReceiveEndpoint("gruppo1-new-order-event", e =>
                     {
-                        e.Consumer<NewOrderConsumer>();
+                        e.Consumer<NewOrderConsumer>(context);
                     });
 
-                    rabbitConfigurator.ReceiveEndpoint("delete-order-event", e =>
+                    rabbitConfigurator.ReceiveEndpoint("gruppo1-delete-order-event", e =>
                     {
-                        e.Consumer<DeleteOrderConsumer>();
+                        e.Consumer<DeleteOrderConsumer>(context);
                     });
 
                     rabbitConfigurator.ConfigureEndpoints(context);

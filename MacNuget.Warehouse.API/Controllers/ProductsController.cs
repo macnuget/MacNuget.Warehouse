@@ -52,8 +52,9 @@ namespace MacNuget.Warehouse.API.Controllers
         {
             var id = _service.InsertProduct(new Product
             {
-                Name = product.Name,
-                Quantity = product.Quantity
+                Id = 9847965,
+                Name = "Fuck shesi 9999",
+                Quantity = 9999
             });
 
             return await GetById(id);

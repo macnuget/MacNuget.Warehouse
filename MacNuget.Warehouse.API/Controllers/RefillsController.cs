@@ -15,13 +15,15 @@ namespace MacNuget.Warehouse.API.Controllers
 
         private readonly ILogger<RefillsController> _logger;
         private readonly IRefillsService _service;
+        private readonly IProductsService _productsService;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public RefillsController(ILogger<RefillsController> logger, IRefillsService service, IPublishEndpoint publishEndpoint)
+        public RefillsController(ILogger<RefillsController> logger, IRefillsService service, IPublishEndpoint publishEndpoint, IProductsService productsService)
         {
             _logger = logger;
             _service = service;
             _publishEndpoint = publishEndpoint;
+            _productsService = productsService;
         }
 
         [HttpGet]
@@ -57,14 +59,25 @@ namespace MacNuget.Warehouse.API.Controllers
 
             var id = _service.InsertRefill(new Refill
             {
+                SupplierId = refill.SupplierId,
+                ArriveDate = refill.ArriveDate,
+                ProductId = refill.ProductId,
                 Quantity = refill.Quantity
             });
 
+            
             var refillEvent = new NewRefillEvent();
-            refillEvent.Product.Id = (int)refill.ProductId;
-            refillEvent.Product.Quantity = refill.Quantity;
+            var product = new ProductForRefillEvent
+            {
+                Id = (int)refill.ProductId,
+                Quantity = refill.Quantity
+            };
+
+            refillEvent.Product = product;
 
             await _publishEndpoint.Publish(refillEvent);
+
+            _productsService.UpdateProduct(new Product { Id = (int)refill.ProductId, Quantity = refill.Quantity });
 
             return await GetById(id);
         }

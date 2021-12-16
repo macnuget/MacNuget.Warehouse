@@ -12,26 +12,21 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
 {
     public class NewProductConsumer : IConsumer<NewProductEvent>
     {
-        public NewProductConsumer()
-        {
-        }
 
         private readonly IProductsService _productsService;
-
         public NewProductConsumer(IProductsService productsService)
         {
             _productsService = productsService;
         }
         public Task Consume(ConsumeContext<NewProductEvent> context)
         {
-            
+            Console.WriteLine("AAAAAAAAAAAAAAAAAA");
             var product = context.Message;
 
             var productToInsert = new Product
             {
                 Id = product.Id,
                 Name = product.Nome,
-
             };
 
             _productsService.InsertProduct(productToInsert);

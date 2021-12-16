@@ -37,8 +37,13 @@
         public int Insert(Product entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
-            using var DB = new NpgsqlConnection(cs);
-            return DB.Insert<Product, int>(entity);
+            var DB = new NpgsqlConnection(cs);
+            var id = DB.InsertAsync<Product, int>(entity)
+                .GetAwaiter().GetResult();
+
+            DB.Dispose();
+
+            return id;
         }
 
         public void Update(Product entity)

@@ -13,9 +13,6 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
 
     public class DeleteOrderConsumer : IConsumer<DeletedOrderEvent>
     {
-        public DeleteOrderConsumer()
-        {
-        }
 
         private readonly IProductsService _productsService;
 

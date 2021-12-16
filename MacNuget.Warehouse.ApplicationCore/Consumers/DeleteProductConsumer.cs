@@ -10,10 +10,7 @@ using System.Threading.Tasks;
 namespace MacNuget.Warehouse.ApplicationCore.Consumers
 {
     public class DeleteProductConsumer : IConsumer<DeleteProductEvent>
-    {
-        public DeleteProductConsumer()
-        {
-        }
+    { 
 
         private readonly IProductsService _productsService;
 
