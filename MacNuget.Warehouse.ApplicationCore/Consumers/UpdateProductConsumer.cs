@@ -1,4 +1,5 @@
 ﻿using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
+using MacNuget.Warehouse.Commands;
 using MacNuget.Warehouse.Domain.Models;
 using MassTransit;
 using Microservices.Ecommerce.DTO.Events;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MacNuget.Warehouse.ApplicationCore.Consumers
 {
-    public class UpdateProductConsumer : IConsumer<UpdateProductEvent>
+    public class UpdateProductConsumer : IConsumer<UpdateProductCommand>
     {
 
         private readonly IProductsService _productsService;
@@ -19,7 +20,7 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
         {
             _productsService = productsService;
         }
-        public Task Consume(ConsumeContext<UpdateProductEvent> context)
+        public Task Consume(ConsumeContext<UpdateProductCommand> context)
         {
 
             var product = context.Message;
@@ -27,7 +28,8 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
             var productToInsert = new Product
             {
                 Id = product.Id,
-                Name = product.Nome,
+                Name = product.Name,
+                Quantity = product.Quantity == 0 ? _productsService.GetProduct(product.Id).Quantity: product.Quantity
 
             };
 
