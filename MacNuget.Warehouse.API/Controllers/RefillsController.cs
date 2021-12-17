@@ -1,6 +1,8 @@
 using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
 using MacNuget.Warehouse.Domain.Dto;
 using MacNuget.Warehouse.Domain.Models;
+using MacNuget.Warehouse.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MacNuget.Warehouse.API.Controllers
@@ -13,11 +15,15 @@ namespace MacNuget.Warehouse.API.Controllers
 
         private readonly ILogger<RefillsController> _logger;
         private readonly IRefillsService _service;
+        private readonly IProductsService _productsService;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public RefillsController(ILogger<RefillsController> logger, IRefillsService service)
+        public RefillsController(ILogger<RefillsController> logger, IRefillsService service, IPublishEndpoint publishEndpoint, IProductsService productsService)
         {
             _logger = logger;
             _service = service;
+            _publishEndpoint = publishEndpoint;
+            _productsService = productsService;
         }
 
         private RefillDto ConvertToDTO(Refill refill)
@@ -73,7 +79,6 @@ namespace MacNuget.Warehouse.API.Controllers
         [HttpPost("")]
         public async Task<ActionResult<RefillDto>> Create([FromBody] RefillDto refill)
         {
-
             var insertedRefill = await _service.InsertRefill(ConvertToModel(refill));
 
             var insertedRefillDto = ConvertToDTO(insertedRefill);

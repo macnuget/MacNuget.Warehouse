@@ -1,6 +1,7 @@
 using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
 using MacNuget.Warehouse.Domain.Dto;
 using MacNuget.Warehouse.Domain.Models;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -14,6 +15,7 @@ namespace MacNuget.Warehouse.API.Controllers
 
         private readonly ILogger<ProductsController> _logger;
         private readonly IProductsService _service;
+    
 
         public ProductsController(ILogger<ProductsController> logger, IProductsService service)
         {
