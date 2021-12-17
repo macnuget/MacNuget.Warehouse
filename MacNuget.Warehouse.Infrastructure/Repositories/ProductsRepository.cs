@@ -20,49 +20,40 @@
             _configuration = configuration;
         }
 
-        public IEnumerable<Product> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.QueryAll<Product>();
+            return await DB.QueryAllAsync<Product>();
         }
 
-        public Product Get(int id)
+        public async Task<Product> Get(int id)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.Query<Product>(p => p.Id == id).FirstOrDefault();
+            return (await DB.QueryAsync<Product>(p => p.Id == id)).FirstOrDefault();
         }
 
-        public int Insert(Product entity)
-        {
-            var cs = _configuration.GetConnectionString("WarehouseDB");
-            var DB = new NpgsqlConnection(cs);
-            var id = DB.InsertAsync<Product, int>(entity)
-                .GetAwaiter().GetResult();
-
-            DB.Dispose();
-
-            return id;
-        }
-
-        public void Update(Product entity)
+        public async Task<int> Insert(Product entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Update<Product>(entity);
+            return await DB.InsertAsync<Product, int>(entity);
         }
 
-        public void Delete(int id)
+        public async Task Update(Product entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Delete<Product>(p => p.Id == id);
+            await DB.UpdateAsync<Product>(entity);
         }
 
-        public long Count()
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            var cs = _configuration.GetConnectionString("WarehouseDB");
+            using var DB = new NpgsqlConnection(cs);
+            await DB.DeleteAsync<Product>(p => p.Id == id);
         }
+
     }
 }

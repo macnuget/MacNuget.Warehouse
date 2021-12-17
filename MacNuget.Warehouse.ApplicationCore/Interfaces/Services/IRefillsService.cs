@@ -9,10 +9,10 @@
 
     public interface IRefillsService
     {
-        IEnumerable<Refill> GetAllRefills();
-        Refill GetRefill(int id);
-        int InsertRefill(Refill entity);
-        void UpdateRefill(Refill entity);
-        void DeleteRefill(int id);
+        Task<IEnumerable<Refill>> GetAllRefills();
+        Task<Refill> GetRefill(int id);
+        Task<Refill> InsertRefill(Refill entity);
+        Task<Refill> UpdateRefill(Refill entity);
+        Task<Refill> DeleteRefill(int id);
     }
 }

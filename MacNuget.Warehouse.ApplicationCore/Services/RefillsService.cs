@@ -18,32 +18,35 @@ namespace MacNuget.Warehouse.ApplicationCore.Services
             _refillsRepository = refillsRepository;
         }
 
-        public IEnumerable<Refill> GetAllRefills()
+        public async Task<IEnumerable<Refill>> GetAllRefills()
         {
-            var list = _refillsRepository.GetAll();
+            var list = await _refillsRepository.GetAll();
             return list;
         }
 
-        public Refill GetRefill(int id)
+        public async Task<Refill> GetRefill(int id)
         {
-            var refill = _refillsRepository.Get(id);
+            var refill = await _refillsRepository.Get(id);
             return refill;
         }
 
-        public int InsertRefill(Refill entity)
+        public async Task<Refill> InsertRefill(Refill entity)
         {
-            var id = _refillsRepository.Insert(entity);
-            return id;
+            var id = await _refillsRepository.Insert(entity);
+            return await _refillsRepository.Get(id);
         }
 
-        public void UpdateRefill(Refill entity)
+        public async Task<Refill> UpdateRefill(Refill entity)
         {
-            _refillsRepository.Update(entity);
+            await _refillsRepository.Update(entity);
+            return await (_refillsRepository.Get(entity.Id));
         }
 
-        public void DeleteRefill(int id)
+        public async Task<Refill> DeleteRefill(int id)
         {
-            _refillsRepository.Delete(id);
+            var item = await (_refillsRepository.Get(id));
+            await _refillsRepository.Delete(id);
+            return item;
         }
     }
 }

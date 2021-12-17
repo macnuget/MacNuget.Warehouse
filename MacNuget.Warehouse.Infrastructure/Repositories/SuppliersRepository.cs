@@ -20,44 +20,41 @@
             _configuration = configuration;
         }
 
-        public IEnumerable<Supplier> GetAll()
+        public async Task<IEnumerable<Supplier>> GetAll()
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.QueryAll<Supplier>();
+            return await DB.QueryAllAsync<Supplier>();
         }
 
-        public Supplier Get(string id)
+        public async Task<Supplier> Get(string id)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.Query<Supplier>(s => s.VatNumber == id).FirstOrDefault();
+            return (await DB.QueryAsync<Supplier>(s => s.VatNumber == id)).FirstOrDefault();
         }
 
-        public string Insert(Supplier entity)
+        public async Task<string> Insert(Supplier entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            return DB.Insert<Supplier, string>(entity);
+            return await DB.InsertAsync<Supplier, string>(entity);
         }
 
-        public void Update(Supplier entity)
+        public async Task Update(Supplier entity)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Update<Supplier>(entity);
+            await DB.UpdateAsync<Supplier>(entity);
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
             var cs = _configuration.GetConnectionString("WarehouseDB");
             using var DB = new NpgsqlConnection(cs);
-            DB.Delete<Supplier>(s => s.VatNumber == id);
+            await DB.DeleteAsync<Supplier>(s => s.VatNumber == id);
         }
 
-        public long Count()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
