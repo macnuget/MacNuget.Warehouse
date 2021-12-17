@@ -20,23 +20,13 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
         {
             _productsService = productsService;
         }
-        public Task Consume(ConsumeContext<UpdateProductCommand> context)
+        public async Task Consume(ConsumeContext<UpdateProductCommand> context)
         {
-
             var product = context.Message;
+            
+            var p = await _productsService.GetProduct(product.Id);
 
-            var productToInsert = new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Quantity = product.Quantity == 0 ? _productsService.GetProduct(product.Id).Quantity: product.Quantity
-
-            };
-
-            _productsService.UpdateProduct(productToInsert);
-
-            return Task.CompletedTask;
-
+            await _productsService.UpdateProduct(new Product { Id = p.Id, Name = product.Name, Quantity = (p.Quantity + product.Quantity) });
         }
     }
 }

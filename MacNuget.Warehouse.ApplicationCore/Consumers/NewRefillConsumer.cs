@@ -19,7 +19,7 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
         {
             _productsService = productsService;
         }
-        public Task Consume(ConsumeContext<NewRefillEvent> context)
+        public async Task Consume(ConsumeContext<NewRefillEvent> context)
         {
 
             var product = context.Message.Product;
@@ -31,9 +31,7 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
                 Quantity = product.Quantity,
             };
 
-            _productsService.UpdateProduct(productToInsert);
-
-            return Task.CompletedTask;
+            await _productsService.UpdateProduct(productToInsert);
         }
     }
 }

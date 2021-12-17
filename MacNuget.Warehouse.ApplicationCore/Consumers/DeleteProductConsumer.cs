@@ -19,14 +19,12 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
         {
             _productsService = productsService;
         }
-        public Task Consume(ConsumeContext<DeleteProductCommand> context)
+        public async Task Consume(ConsumeContext<DeleteProductCommand> context)
         {
 
             var id = context.Message.Id;
 
-            _productsService.DeleteProduct(id);
-
-            return Task.CompletedTask;
+            await _productsService.DeleteProduct(id);
         }
     }
 }
