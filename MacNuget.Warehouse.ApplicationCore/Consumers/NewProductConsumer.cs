@@ -19,9 +19,8 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
         {
             _productsService = productsService;
         }
-        public Task Consume(ConsumeContext<CreateProductCommand> context)
+        public async Task Consume(ConsumeContext<CreateProductCommand> context)
         {
-            Console.WriteLine("AAAAAAAAAAAAAAAAAA");
             var product = context.Message;
 
             var productToInsert = new Product
@@ -31,10 +30,7 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
                 Quantity = product.Quantity
             };
 
-            _productsService.InsertProduct(productToInsert);
-
-            return Task.CompletedTask;  
-          
+            await _productsService.InsertProduct(productToInsert);
         }
     }
 }

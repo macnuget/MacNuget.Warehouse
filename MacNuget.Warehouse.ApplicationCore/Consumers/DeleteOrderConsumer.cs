@@ -1,5 +1,6 @@
 ﻿using Gruppo4MicroserviziDTO.DTOs;
 using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
+using MacNuget.Warehouse.Commands;
 using MacNuget.Warehouse.Domain.Models;
 using MassTransit;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace MacNuget.Warehouse.ApplicationCore.Consumers
 {
 
-    public class DeleteOrderConsumer : IConsumer<DeletedOrderEvent>
+    public class DeleteOrderConsumer : IConsumer<DeleteOrderCommand>
     {
 
         private readonly IProductsService _productsService;
@@ -20,18 +21,13 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
         {
             _productsService = productsService;
         }
-        public Task Consume(ConsumeContext<DeletedOrderEvent> context)
+        public async Task Consume(ConsumeContext<DeleteOrderCommand> context)
         {
+            var product = context.Message;
 
-            var products = context.Message.Products;
+            var p = await _productsService.GetProduct(context.Message.ProductId);
 
-            foreach (var product in products)
-            {
-                _productsService.UpdateProduct(new Product { Id = product.ProductId, Quantity = product.OrderedQuantity });
-            }
-
-            
-            return Task.CompletedTask;
+            await _productsService.UpdateProduct(new Product { Id = p.Id, Quantity = (p.Quantity + product.Quantity) });
         }
     }
 }

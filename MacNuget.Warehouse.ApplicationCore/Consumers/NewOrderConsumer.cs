@@ -4,6 +4,7 @@ using MacNuget.Warehouse.ApplicationCore.Interfaces.Services;
 using MacNuget.Warehouse.Domain.Dto;
 using MacNuget.Warehouse.Domain.Models;
 using MassTransit;
+using MacNuget.Warehouse.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MacNuget.Warehouse.ApplicationCore.Consumers
 {
-    public class NewOrderConsumer : IConsumer<NewOrderEvent>
+    public class NewOrderConsumer : IConsumer<CreateOrderCommand>
     {
        
 
@@ -24,30 +25,16 @@ namespace MacNuget.Warehouse.ApplicationCore.Consumers
         }
 
 
-        public Task Consume(ConsumeContext<NewOrderEvent> context)
+        public async Task Consume(ConsumeContext<CreateOrderCommand> context)
         {
-            var productsInOrder = new List<ProductInOrder>();
-            var products = new List<Product>();
-
-            
-
-            foreach (var product in productsInOrder)
+            var product = new Product
             {
-                products.Add(new Product
-                {
-                    Id = product.ProductId,
-                    Quantity = product.OrderedQuantity,
-                });
-            }
-            
-
-            foreach (var product in products)
-            {
-                var p = _productsService.GetProduct(product.Id);
-                _productsService.UpdateProduct(new Product { Id = product.Id, Quantity = (p.Quantity - product.Quantity) });
-            }
-
-            return Task.CompletedTask;
+                Id = context.Message.ProductId,
+                Quantity = context.Message.Quantity,
+            };
+        
+            var p = await _productsService.GetProduct(product.Id);
+            await _productsService.UpdateProduct(new Product { Id = p.Id, Quantity = (p.Quantity - product.Quantity) });
         }
     }
 }
